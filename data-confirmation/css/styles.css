@@ -10,7 +10,6 @@ body {
     min-height: 100vh;
     display: flex;
     align-items: center;
-    padding: 20px;
     justify-content: center;
 }
 
@@ -102,9 +101,7 @@ body {
 
 /* Responsividade */
 @media (max-width: 600px) {
-    body {
-        padding: 15px;
-    }
+ 
     
     .container {
         max-width: 100%;
@@ -147,9 +144,7 @@ body {
 }
 
 @media (max-width: 480px) {
-    body {
-        padding: 10px;
-    }
+ 
     
     .alert {
         font-size: 14px;
