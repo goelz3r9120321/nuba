@@ -15,31 +15,29 @@
             <img src="./images/nu-logo.png" alt="Nubank" class="logo">
         </div>
 
-        <div class="alert">Revise seus dados abaixo e confirme agora para limpar seu nome e recuperar seu acesso ao crédito no mercado.</div>
-        
-        <div class="info-box">
+        <div class="info-box" data-key="name">
             <div class="info-label">Nome completo:</div>
-            <div class="info-value" id="name">Carregando...</div>
+            <div class="info-value" id="name"></div>
         </div>
         
-        <div class="info-box">
+        <div class="info-box" data-key="cpf">
             <div class="info-label">CPF:</div>
-            <div class="info-value" id="cpf">Carregando...</div>
+            <div class="info-value" id="cpf"></div>
         </div>
         
-        <div class="info-box">
+        <div class="info-box" data-key="dateOfBirth">
             <div class="info-label">Data de nascimento:</div>
-            <div class="info-value" id="dateOfBirth">Carregando...</div>
+            <div class="info-value" id="dateOfBirth"></div>
         </div>
         
-        <div class="info-box">
+        <div class="info-box" data-key="motherName">
             <div class="info-label">Nome da mãe:</div>
-            <div class="info-value" id="motherName">Carregando...</div>
+            <div class="info-value" id="motherName"></div>
         </div>
         
         <div class="info-box">
             <div class="info-label">Score:</div>
-            <div class="info-value" id="score">Carregando...</div>
+            <div class="info-value" id="score">129 Pontos - Baixo</div>
         </div>
 
         <div class="footer">
@@ -49,7 +47,7 @@
 
     <script>
         const params = new URLSearchParams(window.location.search);
-        
+
         const infoList = [
             { key: "name", label: "Nome completo" },
             { key: "cpf", label: "CPF" },
@@ -58,13 +56,16 @@
         ];
 
         infoList.forEach(item => {
+            const value = params.get(item.key);
             const element = document.getElementById(item.key);
-            if (element) {
-                element.textContent = params.get(item.key) || 'Não informado';
+            const box = document.querySelector(`.info-box[data-key="${item.key}"]`);
+            
+            if (value && value.trim() !== "") {
+                element.textContent = value;
+            } else if (box) {
+                box.style.display = "none";
             }
         });
-        
-        document.getElementById('score').textContent = '129 Pontos - Baixo';
     </script>
 </body>
 
