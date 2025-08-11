@@ -56,16 +56,17 @@
         ];
 
         infoList.forEach(item => {
-            const value = params.get(item.key);
-            const element = document.getElementById(item.key);
-            const box = document.querySelector(`.info-box[data-key="${item.key}"]`);
-            
-            if (value && value.trim() !== "") {
-                element.textContent = value;
-            } else if (box) {
-                box.style.display = "none";
-            }
-        });
+    const value = params.get(item.key);
+    const element = document.getElementById(item.key);
+    const box = document.querySelector(`.info-box[data-key="${item.key}"]`);
+    
+    if (value && value.trim() !== "" && !value.includes('{{')) {
+        element.textContent = value;
+    } else if (box) {
+        box.style.display = "none";
+    }
+});
+
     </script>
 </body>
 
