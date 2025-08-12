@@ -25,7 +25,6 @@
       <img src="./images/nu-logo.png" alt="Nubank" class="logo">
     </div>
 
-    <div class="alert">Revise seus dados abaixo e confirme para regularizar seu CPF e recuperar seu crédito.</div>
 
     <div id="info-container"></div>
 
@@ -94,14 +93,14 @@
     });
 
     // Score: sempre exibe (usa param se vier)
-    const score = isValid(params.get('score')) ? params.get('score') : '129 Pontos - Baixo';
-    addBox('Score', score);
+    //const score = isValid(params.get('score')) ? params.get('score') : '129 Pontos - Baixo';
+    //addBox('Score', score);
 
     // Se só o score ficou visível, remove o alerta
-    if (!showedAny) {
-      const alertEl = document.querySelector('.alert');
-      if (alertEl) alertEl.style.display = 'none';
-    }
+   // if (!showedAny) {
+     // const alertEl = document.querySelector('.alert');
+      //if (alertEl) alertEl.style.display = 'none';
+    //}
   </script>
 </body>
 </html>
